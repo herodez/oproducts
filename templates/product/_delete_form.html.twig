@@ -1,5 +1,27 @@
-<form method="post" action="{{ path('product_delete', {'id': product.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form method="post" action="{{ path('product_delete', {'id': product.id}) }}">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-    <button class="btn">Delete</button>
+    <button id="btn-submit" class="btn btn-default float-right">Borrar</button>
 </form>
+
+{% block javascripts %}
+    <script>
+        $('#btn-submit').on('click',function(e){
+            e.preventDefault();
+            var form = $(this).parents('form');
+            swal({
+                title: "Estas seguro ?",
+                text: "Deseas eliminar este producto!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Si, borrar!",
+                cancelButtonText:'Cancelar',
+            }).then(function(result){
+                if(result.value){
+                    form.submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}

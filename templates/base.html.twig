@@ -1,12 +1,50 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Optime products{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+        <!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}"></script>
+
+        <!-- Fonts -->
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+
+        <!-- Styles -->
+        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav class="navbar navbar-dark bg-optime">
+            <a class="navbar-brand" href="{{path('product_index')}}">
+                <img src="/docs/4.1/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+                Optime products
+            </a>
+        </nav>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="margin-bottom:0">
+                <li class="breadcrumb-item"><a href="{{path('product_index')}}"><strong>Productos</strong></a></li>
+                {% block breadcrumb%}{%endblock%}
+            </ol>
+        </nav>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}" style="margin-top:0">
+                    <strong>{{ message }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div id="app" class="container">
+            {% block body %}{% endblock %}
+        </div>
+    
         {% block javascripts %}{% endblock %}
     </body>
 </html>

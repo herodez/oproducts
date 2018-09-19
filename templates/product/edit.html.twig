@@ -1,13 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Product{% endblock %}
+{% block breadcrumb%}
+    <li class="breadcrumb-item active" aria-current="page">Editar producto</li>
+{%endblock%}
+
+{% block title %}Editar Producto{% endblock %}
 
 {% block body %}
-    <h1>Edit Product</h1>
-
-    {{ include('product/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('product_index') }}">back to list</a>
-
-    {{ include('product/_delete_form.html.twig') }}
+    <div class="card">
+        <h3 class="card-header bg-optime text-white">Editar producto</h3>
+        <div class="card-body">
+            {{ include('product/_form.html.twig', {'button_label': 'Actualizar'}) }}
+            {{ include('product/_delete_form.html.twig') }}
+        </div>
+    </div>
 {% endblock %}

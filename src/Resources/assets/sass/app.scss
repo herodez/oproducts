@@ -1,0 +1,25 @@
+@import "variables";
+@import '~bootstrap/scss/bootstrap';
+
+#app{
+    padding-top:5%;
+}
+
+.btn-primary {
+    color: white;
+}
+
+.bg-optime{
+    background-color:rgba(185,207,22,1.00);
+}
+
+.sorted-desc::after{
+    content:'▼';
+    color:white;
+}
+
+.sorted-asc::after{
+    content:'▲';
+    color:white;
+}
+

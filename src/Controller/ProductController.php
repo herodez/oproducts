@@ -9,18 +9,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
- * @Route("/product")
+ * @Route("/")
  */
 class ProductController extends AbstractController
 {
     /**
      * @Route("/", name="product_index", methods="GET")
      */
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        return $this->render('product/index.html.twig', ['products' => $productRepository->findAll()]);
+
+        // Direction to order the registers : ('desc', 'asc')
+        $orderDic = $request->query->get('direction', null);
+
+        $queryBuilder = $productRepository->getWithSearchQueryBuilder('');
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            5/*limit per page*/
+        );
+
+        return $this->render('product/index.html.twig', 
+            [
+                'pagination' => $pagination,
+                'orderDic' => $orderDic
+            ]
+        );
     }
 
     /**
@@ -36,6 +54,12 @@ class ProductController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
+
+
+            $this->addFlash(
+                'primary',
+                'Se ha creado un nuevo producto!'
+            );
 
             return $this->redirectToRoute('product_index');
         }
@@ -65,6 +89,11 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash(
+                'primary',
+                'El producto se ha actualizado!'
+            );
+
             return $this->redirectToRoute('product_edit', ['id' => $product->getId()]);
         }
 
@@ -83,6 +112,11 @@ class ProductController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->remove($product);
             $em->flush();
+
+            $this->addFlash(
+                'primary',
+                'El producto ha sido eliminado!'
+            );
         }
 
         return $this->redirectToRoute('product_index');

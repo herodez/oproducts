@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
- * @UniqueEntity("code")
- * @UniqueEntity("name")
+ * @UniqueEntity( fields={"code"}, message="El codigo ya esta en uso")
+ * @UniqueEntity( fields={"name"}, message="El nombre ya esta en uso")
  */
 class Product
 {
@@ -21,31 +22,55 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=10, unique=true)
+     * @Assert\NotBlank(message="Ingrese un codigo")
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 10,
+     *      minMessage = "El codigo debe ser minimo de {{ limit }} caracteres de largo",
+     *      maxMessage = "El codigo no debe ser mayor de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern     = "/^[a-z 0-9]+$/i",
+     *     htmlPattern = "^[a-zA-Z 0-9]+$",
+     *     message="El código no puede contener caracteres especiales ni espacios"
+     * )
      */
     private $code;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Ingrese un nombre")
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 255,
+     *      minMessage = "El nombre debe ser minimo de {{ limit }} caracteres de largo",
+     *      maxMessage = "El nombre no debe ser mayor de {{ limit }} caracteres"
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Ingrese una descripción")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Ingrese una marca")
      */
     private $brand;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Ingrese una categoría")
      */
     private $category;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank(message="Ingrese un precio")
+     * 
      */
     private $price;
 

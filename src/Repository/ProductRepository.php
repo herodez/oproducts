@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +20,11 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function getWithSearchQueryBuilder(?string $term): QueryBuilder
+    {
+        return$this->createQueryBuilder('p')->orderBy('p.id', 'DESC');
+    }
+    
 //    /**
 //     * @return Product[] Returns an array of Product objects
 //     */
